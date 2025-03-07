@@ -35,8 +35,8 @@ struct HMSChatMessageView: View {
     var body: some View {
         if isPartOfTransparentChat {
             messageView
-                .padding(8)
-                .background(.backgroundDim, cornerRadius: 8, opacity: 0.64)
+                .padding(.horizontal, 4)
+                //.background(.backgroundDim, cornerRadius: 8, opacity: 0.64)
         }
         else {
             if messageModel.recipient.type != .broadcast {
@@ -51,7 +51,7 @@ struct HMSChatMessageView: View {
     
     var messageView: some View {
         HStack(alignment: .top, spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
                     Text(messageModel.sender?.name ?? "")
                         .font(.subtitle2Semibold14)
