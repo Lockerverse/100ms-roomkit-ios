@@ -15,6 +15,7 @@ struct HMSPrebuiltMeetingView: View {
     
     @EnvironmentObject var roomModel: HMSRoomModel
     @EnvironmentObject var roomInfoModel: HMSRoomInfoModel
+    @EnvironmentObject var prebuiltOptions: HMSPrebuiltOptions
     
     @State var userStreamingState = EnvironmentValues.HMSUserStreamingState.none
     @State private var controlsState = EnvironmentValues.HMSControlsState.visible
@@ -44,6 +45,7 @@ struct HMSPrebuiltMeetingView: View {
                         UIApplication.shared.isIdleTimerDisabled = true
                         Task {
                             try await roomModel.joinSession()
+                            try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage)
                         }
                     }
                 case .default:
@@ -95,5 +97,12 @@ struct HMSPrebuiltMeetingView_Previews: PreviewProvider {
             .environmentObject(HMSRoomInfoModel())
             .environmentObject(HMSUITheme())
 #endif
+    }
+}
+
+extension HMSRoomModel {
+    func setUserMetadataImage(userImage: String?) async {
+        guard let userImage = userImage else { return }
+        try? await setUserMetadata("{\"image\": \"\(userImage)\"}")
     }
 }

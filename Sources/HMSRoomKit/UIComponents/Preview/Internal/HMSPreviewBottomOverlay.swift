@@ -22,6 +22,7 @@ struct HMSPreviewBottomOverlay: View {
     
     @EnvironmentObject var roomModel: HMSRoomModel
     @EnvironmentObject var currentTheme: HMSUITheme
+    @EnvironmentObject var prebuiltOptions: HMSPrebuiltOptions
     
     @State var showDeviceSettings = false
     @State private var cancellable: AnyCancellable?
@@ -72,6 +73,7 @@ struct HMSPreviewBottomOverlay: View {
                             isJoining = true
                             do {
                                 try await roomModel.joinSession()
+                                try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage)
                             }
                             catch {
                                 isJoining = false

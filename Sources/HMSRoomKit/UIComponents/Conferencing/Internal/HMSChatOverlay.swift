@@ -32,7 +32,7 @@ struct HMSBottomOverlay: View {
                         
                         HMSChatScreen(isTransparentMode: true, content: {}, contentV: {})
                             .environment(\.chatScreenAppearance, .constant(.init(pinnedMessagePosition: .bottom)))
-                            .frame(maxHeight: 232)
+                            .frame(maxHeight: 252)
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(isHLSViewer ? [.horizontal, .top] : [.horizontal, .vertical], 8)
                             .padding(.bottom, keyboardState.wrappedValue == .hidden ? 0 : 8)

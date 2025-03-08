@@ -243,6 +243,8 @@ struct HMSChatListView: View {
                         HMSChatMessageView(messageModel: message, isPartOfTransparentChat: isTransparentMode, recipient: $recipient)
                             .id(message.messageID)
                             .mirrorV()
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: filteredMessages)
                     }
                 }
             }
