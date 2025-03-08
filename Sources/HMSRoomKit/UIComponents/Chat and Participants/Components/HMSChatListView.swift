@@ -222,7 +222,8 @@ struct HMSChatListView: View {
                     let offset = frame.minY
                     Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: offset)
                 }
-                LazyVStack(spacing: isTransparentMode ? 12 : 5) {
+                
+                LazyVStack(spacing: isTransparentMode ? 5 : 5) {
                     
                     let filteredMessages = messages.filter({ message in
 #if Preview
@@ -242,6 +243,8 @@ struct HMSChatListView: View {
                         HMSChatMessageView(messageModel: message, isPartOfTransparentChat: isTransparentMode, recipient: $recipient)
                             .id(message.messageID)
                             .mirrorV()
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: filteredMessages)
                     }
                 }
             }

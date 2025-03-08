@@ -16,7 +16,7 @@ struct HMSJoinNameLabel: View {
     @State private var namePreset = false
     
     var body: some View {
-        HMSJoinNameView(name: $roomModel.userName).allowsHitTesting(!namePreset)
+        HMSJoinNameView(name: $roomModel.userName)
             .onAppear {
                 namePreset = !roomModel.userName.isEmpty
         }

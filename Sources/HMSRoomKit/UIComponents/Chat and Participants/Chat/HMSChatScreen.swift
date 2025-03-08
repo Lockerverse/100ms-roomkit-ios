@@ -73,7 +73,7 @@ public struct HMSChatScreen<Content, ContentV>: View where Content : View, Conte
             return []
         }
         
-        return VStack(alignment: .leading, spacing: 16) {
+        return VStack(alignment: .leading, spacing: 8) {
             
             chatListView
             

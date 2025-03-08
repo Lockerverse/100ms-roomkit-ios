@@ -15,9 +15,11 @@ public class HMSPrebuiltOptions: ObservableObject {
     
     var theme: HMSUITheme?
     var roomOptions: HMSRoomOptions?
+    var userImage: String?
     
-    public init(theme: HMSUITheme? = nil, roomOptions: HMSRoomOptions? = nil) {
+    public init(theme: HMSUITheme? = nil, roomOptions: HMSRoomOptions? = nil, userImage: String? = nil) {
         self.theme = theme
         self.roomOptions = roomOptions
+        self.userImage = userImage
     }
 }
