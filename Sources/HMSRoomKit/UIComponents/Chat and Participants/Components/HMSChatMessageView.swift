@@ -12,7 +12,8 @@ import Popovers
 import HMSRoomModels
 
 struct UserMetadata: Codable {
-    let image: String
+    let image: String?
+    let verified: Bool?
 }
 
 struct HMSChatMessageView: View {
@@ -64,7 +65,9 @@ struct HMSChatMessageView: View {
     
     var messageView: some View {
         HStack(alignment: .top, spacing: 8) {
-            HMSAsyncImageAvatar(url: URL(string: senderMetadata?.image ?? ""))
+            HMSAsyncImageAvatar(url: URL(string: senderMetadata?.image ?? ""),
+                                userVerified: senderMetadata?.verified == true,
+                                userName: messageModel.sender?.name ?? "")
                 .padding(.top, 1)
           
             VStack(alignment: .leading, spacing: 4) {
@@ -167,6 +170,8 @@ struct HMSChatMessageView_Previews: PreviewProvider {
 struct HMSAsyncImageAvatar: View {
     let itemSize: CGFloat = 40
     let url: URL?
+    let userVerified: Bool
+    let userName: String
     
     @State private var isLoaded = false
     @State private var cachedImage: UIImage?
@@ -208,6 +213,11 @@ struct HMSAsyncImageAvatar: View {
                 placeholderView
             }
         }
+        .overlay(alignment: .topTrailing) {
+            if userVerified {
+                Image("verified").resizable().frame(width: 13, height: 13).offset(x: 1, y: 1)
+            }
+        }
         .onAppear {
             loadCachedImage()
         }
@@ -215,12 +225,12 @@ struct HMSAsyncImageAvatar: View {
     
     var placeholderView: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all).opacity(0.9)
-            Image(systemName: "person.fill")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 18, height: 18)
-                .foregroundColor(.gray)
+            AvatarColors.color(forName: userName)
+                .frame(width: itemSize, height: itemSize)
+                .clipShape(Circle())
+            Text(userName.first?.description ?? "")
+                .foregroundColor(.black)
+                .font(.subtitle2Semibold16)
         }
         .frame(width: itemSize, height: itemSize)
         .clipShape(Circle())
@@ -249,5 +259,24 @@ struct HMSAsyncImageAvatar: View {
                 self.isLoaded = true
             }
         }.resume()
+    }
+}
+
+struct AvatarColors {
+    static var colors: [Color] = [Color(red: 0.31, green: 0.306, blue: 0.89),
+                                  Color(red: 0.89, green: 0.192, blue: 1),
+                                  Color(red: 0.941, green: 0.557, blue: 0.11),
+                                  Color(red: 0.584, green: 0.584, blue: 1),
+                                  Color(red: 1, green: 0.722, blue: 0),
+                                  Color.red]
+    
+    static var randomColor: Color {
+        colors.randomElement() ?? Color(red: 0.31, green: 0.306, blue: 0.89)
+    }
+    
+    static func color(forName name: String) -> Color {
+        let hash = name.hashValue
+        let index = abs(hash % colors.count)  // Ensures the index is within bounds
+        return colors[index]
     }
 }

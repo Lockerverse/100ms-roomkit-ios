@@ -73,7 +73,7 @@ struct HMSPreviewBottomOverlay: View {
                             isJoining = true
                             do {
                                 try await roomModel.joinSession()
-                                try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage)
+                                try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage, userVerified: prebuiltOptions.userVerified)
                             }
                             catch {
                                 isJoining = false

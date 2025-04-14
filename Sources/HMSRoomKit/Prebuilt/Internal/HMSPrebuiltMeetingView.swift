@@ -45,7 +45,7 @@ struct HMSPrebuiltMeetingView: View {
                         UIApplication.shared.isIdleTimerDisabled = true
                         Task {
                             try await roomModel.joinSession()
-                            try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage)
+                            try await roomModel.setUserMetadataImage(userImage: prebuiltOptions.userImage, userVerified: prebuiltOptions.userVerified)
                         }
                     }
                 case .default:
@@ -101,8 +101,22 @@ struct HMSPrebuiltMeetingView_Previews: PreviewProvider {
 }
 
 extension HMSRoomModel {
-    func setUserMetadataImage(userImage: String?) async {
-        guard let userImage = userImage else { return }
-        try? await setUserMetadata("{\"image\": \"\(userImage)\"}")
+    func setUserMetadataImage(userImage: String?, userVerified: Bool?) async {
+        var metadataDict: [String: Any] = [:]
+
+        if let userImage = userImage {
+            metadataDict["image"] = userImage
+        }
+
+        if let userVerified = userVerified {
+            metadataDict["verified"] = userVerified
+        }
+
+        guard !metadataDict.isEmpty,
+              let jsonData = try? JSONSerialization.data(withJSONObject: metadataDict, options: []),
+              let jsonString = String(data: jsonData, encoding: .utf8)
+        else { return }
+
+        try? await setUserMetadata(jsonString)
     }
 }
